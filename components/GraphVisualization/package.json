@@ -1,0 +1,18 @@
+{
+  "name": "graph-visualization",
+  "version": "1.0.0",
+  "description": "Reusable graph visualization components for supply chain data",
+  "main": "index.js",
+  "private": true,
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "d3": "^7.0.0",
+    "react-force-graph-2d": "^1.23.8",
+    "leaflet": "^1.7.1",
+    "react-leaflet": "^3.2.0",
+    "@react-google-maps/api": "^2.7.0"
+  }
+}

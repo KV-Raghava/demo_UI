@@ -1,0 +1,57 @@
+.avatarIcon {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  border-radius: var(--br-81xl);
+  object-fit: cover;
+}
+.span,
+.span1 {
+  position: relative;
+  line-height: 140%;
+}
+.span1 {
+  font-size: var(--font-size-sm);
+  line-height: 160%;
+  font-family: var(--font-gilroy-regular);
+}
+.avatarWrapper,
+.userNameWrapper {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.avatarWrapper {
+  gap: var(--gap-xs);
+  z-index: 0;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  margin: 0 !important;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+.matImg {
+  align-self: stretch;
+  background: linear-gradient(
+    98.86deg,
+    var(--color-red),
+    var(--Primary-Red-Dark)
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-xl);
+  position: relative;
+  gap: var(--gap-3xs);
+  text-align: center;
+  font-size: var(--font-size-xl);
+  color: var(--Neutral-white);
+  font-family: var(--font-gilroy-semibold);
+}

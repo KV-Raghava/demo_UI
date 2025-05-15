@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Gilroy-Bold:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+@font-face {
+  font-family: "Gilroy-SemiBold";
+  src: url("/Gilroy-SemiBold.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Gilroy-Regular";
+  src: url("/Gilroy-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("/Gilroy-Medium.ttf");
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* Fonts */
+  --font-gilroy-regular: Gilroy-Regular;
+  --font-gilroy-semibold: Gilroy-SemiBold;
+  --font-gilroy-medium: Gilroy-Medium;
+  --font-gilroy-bold: Gilroy-Bold;
+
+  /* font sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-lgi: 1.188rem;
+  --font-size-xl: 1.25rem;
+  --font-size-5xl: 1.5rem;
+  --font-size-7xl: 1.625rem;
+  --font-size-13xl: 2rem;
+  --font-size-21xl: 2.5rem;
+
+  /* Colors */
+  --color-black: #000;
+  --color-darkslategray-100: #3f4254;
+  --color-dimgray-100: #555;
+  --color-gray-100: #fafafa;
+  --color-gray-200: #241f21;
+  --color-lightseagreen-100: #39a89f;
+  --color-lightseagreen-200: rgba(57, 168, 159, 0.08);
+  --color-mediumpurple-100: rgba(144, 99, 204, 0.08);
+  --color-red: #ed1515;
+  --color-whitesmoke-100: #f4f4f4;
+
+  /* Gaps */
+  --gap-0: 0rem;
+  --gap-11xs: 0.125rem;
+  --gap-9xs: 0.25rem;
+  --gap-6xs: 0.437rem;
+  --gap-5xs: 0.5rem;
+  --gap-3xs: 0.625rem;
+  --gap-2xs: 0.687rem;
+  --gap-xs: 0.75rem;
+  --gap-base: 1rem;
+  --gap-lg: 1.125rem;
+  --gap-xl: 1.25rem;
+  --gap-5xl: 1.5rem;
+  --gap-12xl-8: 1.987rem;
+  --gap-13xl: 2rem;
+  --gap-29xl: 3rem;
+
+  /* Paddings */
+  --padding-9xs: 0.25rem;
+  --padding-7xs: 0.375rem;
+  --padding-6xs: 0.437rem;
+  --padding-5xs: 0.5rem;
+  --padding-xs: 0.75rem;
+  --padding-base: 1rem;
+  --padding-xl: 1.25rem;
+  --padding-2xl: 1.312rem;
+  --padding-5xl: 1.5rem;
+  --padding-13xl: 2rem;
+
+  /* Border radiuses */
+  --br-9xs: 4px;
+  --br-7xs: 6px;
+  --br-5xs-1: 7.1px;
+  --br-5xs: 8px;
+  --br-base: 16px;
+  --br-5xl: 24px;
+  --br-13xl: 32px;
+  --br-29xl: 48px;
+  --br-81xl: 100px;
+
+  /* Effects */
+  --elevation-4: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* Figma Variables */
+
+  /* Color Variables */
+  --Accent-Purple-dark: #9063cc;
+  --Grey-Nav-Text: #5e5e5e;
+  --Neutral-Dark-grey: #2e2d2c;
+  --Neutral-grey-1: #f8f9fa;
+  --Neutral-white: #fff;
+  --Primary-Mint-dark: #2e867f;
+  --Primary-Mint-mid: #33978f;
+  --Primary-Red-Dark: #be1111;
+  --black-06: rgba(0, 0, 0, 0.6);
+  --grey-darken-1: #757575;
+  --grey-darken-2: #616161;
+  --grey-darken-4: #212121;
+  --grey-lighten-2: #e0e0e0;
+  --grey-lighten-3: #eee;
+  --grey-lighten-4: #f5f5f5;
+}
