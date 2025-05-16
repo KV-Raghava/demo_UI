@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import ForceGraph2D from 'react-force-graph-2d';
 import * as d3 from 'd3';
 import '../styles/GraphStyles.css';
@@ -31,6 +32,80 @@ const GraphVisualization = ({ data }) => {
   // Track if node was dragged to fix its position
   const [draggedNodes, setDraggedNodes] = useState(new Set());
 
+  // Function to generate more user-friendly display names
+  const getDisplayName = (node) => {
+    const { v_type, v_id, attributes } = node;
+    
+    switch (v_type) {
+      case 'Farmer':
+        return attributes.farmer_name || `Farmer ${v_id.split('-').pop()}`;
+      
+      case 'Farmer_Group':
+        return attributes.farmer_group_name || `Farmer Group ${v_id.split('-').pop()}`;
+      
+      case 'Local_Buying_Agent':
+        return attributes.buying_agent_name || `Agent ${v_id.split('-').pop()}`;
+      
+      case 'Lot':
+        // Format: "Lot #[ID] - [Product] [Grade]"
+        return `Lot #${v_id.split('-').pop()} - ${attributes.product || ''} ${attributes.grade || ''}`.trim();
+      
+      case 'PMB':
+        // Format: "Material: [material] - Batch: [batch_no]"
+        return `Material: ${attributes.material || 'N/A'} - Batch: ${attributes.batch_no || 'N/A'}`;
+      
+      case 'Process_Order':
+        // Format: "Process: [process_name]"
+        return attributes.process_name || `Process ${v_id.split('-').pop()}`;
+      
+      case 'Purchase_Order':
+        // Format: "PO #[ID] - [vendor_name]"
+        return `PO #${v_id.split('-').pop()} - ${attributes.vendor_name || ''}`.trim();
+      
+      case 'Transfer_Order':
+        // Format: "Transfer: [from_plant] → [to_plant]"
+        return `Transfer: ${attributes.from_plant || 'N/A'} → ${attributes.to_plant || 'N/A'}`;
+      
+      default:
+        return attributes.name || v_id;
+    }
+  };
+  
+  // Function to check if a node has EUDR compliance field and return its status
+  const getEudrComplianceStatus = (node) => {
+    if (node.attributes && 'is_eudr_compliant' in node.attributes) {
+      return node.attributes.is_eudr_compliant;
+    }
+    return null; // null means no compliance field present
+  };
+
+  // Function to generate appropriate short labels
+  const getShortLabel = (node) => {
+    const { v_type } = node;
+    
+    // Return full names instead of abbreviations
+    switch (v_type) {
+      case 'Farmer':
+        return 'Farmer';
+      case 'Farmer_Group':
+        return 'Farmer Group';
+      case 'Local_Buying_Agent':
+        return 'Buying Agent';
+      case 'Lot':
+        return 'Lot';
+      case 'Purchase_Order':
+        return 'Purchase Order';
+      case 'PMB':
+        return 'Plant Material Batch';
+      case 'Process_Order':
+        return 'Process Order';
+      case 'Transfer_Order':
+        return 'Transfer Order';
+      default:
+        return 'Unknown';
+    }
+  };
+
   useEffect(() => {
     console.log("GraphVisualization received data:", data);
     if (!data || !data.length) {
@@ -47,43 +122,8 @@ const GraphVisualization = ({ data }) => {
       // New data structure with node array
       data[0].node.forEach(node => {
         // Process nodes
-        let shortLabel = '';
-        
-        if (node.v_type === 'Farmer') {
-          shortLabel = 'nu';
-        }
-        else if (node.v_type === 'Farmer_Group') {
-          shortLabel = 'FG';
-        }
-        else if (node.v_type === 'Local_Buying_Agent') {
-          shortLabel = 'BA';
-        }
-        else if (node.v_type === 'Lot') {
-          shortLabel = '123';
-        }
-        else if (node.v_type === 'Purchase_Order') {
-          shortLabel = '61';
-        }
-        else if (node.v_type === 'PMB') {
-          shortLabel = 'PM';
-        }
-        else if (node.v_type === 'Process_Order') {
-          shortLabel = 'PO';
-        }
-        else if (node.v_type === 'Transfer_Order') {
-          shortLabel = 'TO';
-        }
-        else {
-          shortLabel = 'NA';
-        }
-        
-        // Use specific name attributes based on node type
-        const displayName = 
-          node.attributes.farmer_name || 
-          node.attributes.buying_agent_name || 
-          node.attributes.farmer_group_name || 
-          node.attributes.name || 
-          node.v_id;
+        const shortLabel = getShortLabel(node);
+        const displayName = getDisplayName(node);
         
         nodes.push({
           id: node.v_id,
@@ -128,38 +168,8 @@ const GraphVisualization = ({ data }) => {
       
       nodeCategories.forEach(category => {
         data[0][category].forEach(node => {
-          let shortLabel = '';
-          
-          if (node.v_type === 'Farmer') {
-            shortLabel = 'nu';
-          }
-          else if (node.v_type === 'Farmer_Group') {
-            shortLabel = 'FG';
-          }
-          else if (node.v_type === 'Local_Buying_Agent') {
-            shortLabel = 'BA';
-          }
-          else if (node.v_type === 'Lot') {
-            shortLabel = '123';
-          }
-          else if (node.v_type === 'Purchase_Order') {
-            shortLabel = '61';
-          }
-          else if (node.v_type === 'PMB') {
-            shortLabel = 'PM';
-          }
-          else if (node.v_type === 'Process_Order') {
-            shortLabel = 'PO';
-          }
-          else if (node.v_type === 'Transfer_Order') {
-            shortLabel = 'TO';
-          }
-          else {
-            shortLabel = 'NA';
-          }
-          
-          // Use the name attribute if available, otherwise use id
-          const displayName = node.attributes.name || node.v_id;
+          const shortLabel = getShortLabel(node);
+          const displayName = getDisplayName(node);
           
           nodes.push({
             id: node.v_id,
@@ -224,8 +234,8 @@ const GraphVisualization = ({ data }) => {
       ];
       
       // Calculate X positions based on node type order (strict columns)
-      const totalWidth = dimensions.width * 0.85; // Use 85% of the width
-      const xStep = totalWidth / (nodeTypeOrder.length - 1); // Equal spacing
+      const totalWidth = dimensions.width * 0.92; // Increased from 0.85 to use more screen width
+      const xStep = totalWidth / (nodeTypeOrder.length - 1) * 1.1; // Increased horizontal spacing by 10%
       const xOffset = -totalWidth / 2; // Center the line
       
       // For a straight line layout, reduce or remove most forces
@@ -241,11 +251,10 @@ const GraphVisualization = ({ data }) => {
       // No center force for a straight line
       fgRef.current.d3Force('center', null);
       
-      // Minimal collision detection just to prevent exact overlap
-      fgRef.current.d3Force('collision', d3.forceCollide(30));
+      // Increased collision detection radius to prevent overlap with larger nodes
+      fgRef.current.d3Force('collision', d3.forceCollide(55)); // Increased from 30 to 55
       
       // Remove any gravity force
-      fgRef.current.d3Force('gravity', null);
       
       // Clear any initial velocities for a controlled straight line layout
       graphData.nodes.forEach(node => {
@@ -270,7 +279,7 @@ const GraphVisualization = ({ data }) => {
             
             if (totalOfType > 1) {
               // Create a vertical distribution for nodes of the same type
-              const yRange = 300; // Increased from 150 to 300 for more vertical spacing
+              const yRange = 500; // Increased from 300 for more vertical spacing
               const yStep = yRange / (totalOfType - 1 || 1);
               const yCenter = 0; // Center Y position
               
@@ -345,22 +354,120 @@ const GraphVisualization = ({ data }) => {
   const renderNodeTooltip = () => {
     if (!selectedNode) return null;
     
+    // Check if this is a farmer node with polygon data
+    const isFarmer = selectedNode.type === 'Farmer';
+    const hasPolygon = isFarmer && selectedNode.attributes.polygon;
+    
+    // Helper function to convert to sentence case (first letter capital, rest lowercase)
+    const toSentenceCase = (text) => {
+      if (!text || typeof text !== 'string') return text;
+      return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+    };
+    
+    // Helper function to format type field with sentence case for each word
+    const formatTypeDisplay = (type) => {
+      return type.split('_')
+        .map(word => toSentenceCase(word))
+        .join(' ');
+    };
+    
     return (
       <div className="node-tooltip">
-        <h3>{selectedNode.type}</h3>
-        <p>ID: {selectedNode.id}</p>
+        <h3>{selectedNode.name}</h3>
+        <p><strong>Type:</strong> {formatTypeDisplay(selectedNode.type)}</p>
+        <p><strong>ID:</strong> {selectedNode.id}</p>
         <div className="attributes">
-          {Object.entries(selectedNode.attributes).map(([key, value]) => (
-            <div key={key} className="attribute-row">
-              <span className="attribute-key">{key}:</span>
-              <span className="attribute-value">
-                {typeof value === 'boolean' 
-                  ? value ? '✓' : '✗'
-                  : String(value)}
-              </span>
-            </div>
-          ))}
+          {Object.entries(selectedNode.attributes)
+            .filter(([key]) => {
+              // Filter out special attributes, id (already shown), and polygon (will be handled separately)
+              return !key.startsWith('@') && key !== 'id' && key !== 'polygon';
+            })
+            .map(([key, value]) => {
+              // Format the key as sentence case
+              const formattedKey = key.split('_')
+                .map(word => toSentenceCase(word))
+                .join(' ');
+              
+              // Format the value as sentence case if it's a string (except for IDs and specific values)
+              let formattedValue = value;
+              if (typeof value === 'string' && 
+                  !key.toLowerCase().includes('id') && 
+                  !key.toLowerCase().includes('date') &&
+                  !key.toLowerCase().includes('time')) {
+                formattedValue = toSentenceCase(value);
+              }
+              
+              return (
+                <div key={key} className="attribute-row">
+                  <span className="attribute-key">{formattedKey}:</span>
+                  <span className="attribute-value">
+                    {typeof value === 'boolean' 
+                      ? value ? '✓' : '✗'
+                      : String(formattedValue)}
+                  </span>
+                </div>
+              );
+            })}
         </div>
+        
+        {/* Add View Map button for farmers with polygon data */}
+        {hasPolygon && (
+          <div className="view-map-button-container">
+            <button 
+              className="view-map-button"
+              onClick={() => {
+                // Create a modal to display the map
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'map-modal';
+                
+                // Close button
+                const closeButton = document.createElement('button');
+                closeButton.className = 'map-modal-close';
+                closeButton.innerHTML = '×';
+                closeButton.onclick = () => document.body.removeChild(modalDiv);
+                
+                // Title
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'map-modal-title';
+                titleDiv.textContent = `${selectedNode.name}'s Farm Map`;
+                
+                // Map container
+                const mapContainer = document.createElement('div');
+                mapContainer.className = 'map-modal-content';
+                
+                modalDiv.appendChild(closeButton);
+                modalDiv.appendChild(titleDiv);
+                modalDiv.appendChild(mapContainer);
+                document.body.appendChild(modalDiv);
+                
+                // Import and initialize FarmMap component dynamically
+                import('./FarmMap').then(module => {
+                  const FarmMap = module.default;
+                  const farmer = {
+                    v_id: selectedNode.id,
+                    v_type: 'Farmer',
+                    attributes: selectedNode.attributes
+                  };
+                  
+                  // Create a minimal dataset with just this farmer
+                  const singleFarmerData = [
+                    { 
+                      v_farmer: [farmer]
+                    }
+                  ];
+                  
+                  // Render with React
+                  ReactDOM.render(
+                    React.createElement(FarmMap, { data: singleFarmerData }),
+                    mapContainer
+                  );
+                });
+              }}
+            >
+              View Map
+            </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -410,7 +517,7 @@ const GraphVisualization = ({ data }) => {
         graphData={graphData}
         width={dimensions.width} // Use dynamic width
         height={dimensions.height} // Use dynamic height
-        nodeRelSize={16} // Larger nodes
+        nodeRelSize={20} // Increased to match the larger node radius
         nodeLabel={null} // We'll handle this in nodeCanvasObject
         enableNodeDrag={true}
         enableZoomInteraction={true}
@@ -464,9 +571,9 @@ const GraphVisualization = ({ data }) => {
           node.fy = node.y;
         }}
         nodeCanvasObject={(node, ctx, globalScale) => {
-          // Bigger nodes for better visibility
-          const nodeRadius = 20; 
-          const fontSize = 12;
+          // Bigger nodes for better visibility and to fit full names
+          const nodeRadius = 40; // Increased from 30 to make nodes bigger
+          const fontSize = 12;   // Increased font size for better readability
           
           // Node circle
           ctx.beginPath();
@@ -487,12 +594,40 @@ const GraphVisualization = ({ data }) => {
           ctx.fillStyle = 'white';
           ctx.font = `bold ${fontSize}px Sans-Serif`;
           
-          // Display the short label
-          ctx.fillText(
-            node.shortLabel,
-            node.x,
-            node.y
-          );
+          // Split text into multiple lines if needed
+          const maxLineWidth = nodeRadius * 1.8; // Maximum width for text
+          const words = node.shortLabel.split(' ');
+          let lines = [];
+          let currentLine = '';
+          
+          words.forEach(word => {
+            const testLine = currentLine ? `${currentLine} ${word}` : word;
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > maxLineWidth && currentLine !== '') {
+              lines.push(currentLine);
+              currentLine = word;
+            } else {
+              currentLine = testLine;
+            }
+          });
+          
+          if (currentLine) {
+            lines.push(currentLine);
+          }
+          
+          // Draw multiline text centered in node
+          const lineHeight = fontSize * 1.2;
+          const totalHeight = lines.length * lineHeight;
+          const startY = node.y - (totalHeight / 2) + (lineHeight / 2);
+          
+          lines.forEach((line, i) => {
+            ctx.fillText(
+              line,
+              node.x,
+              startY + (i * lineHeight)
+            );
+          });
           
           // Add highlight when hovering
           if (node === selectedNode) {
@@ -506,6 +641,45 @@ const GraphVisualization = ({ data }) => {
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
             ctx.lineWidth = 4;
             ctx.stroke();
+          }
+
+          // Draw EUDR compliance flag if the field exists
+          const eudrStatus = getEudrComplianceStatus(node);
+          if (eudrStatus !== null) {
+            // Position the badge at the top-right corner of the node
+            const badgeRadius = 10;
+            const badgeX = node.x + nodeRadius * 0.7;
+            const badgeY = node.y - nodeRadius * 0.7;
+            
+            // Draw the badge circle
+            ctx.beginPath();
+            ctx.arc(badgeX, badgeY, badgeRadius, 0, 2 * Math.PI);
+            
+            // Set the badge color based on compliance status
+            if (eudrStatus) {
+              ctx.fillStyle = '#4CAF50';  // Green for compliant
+            } else {
+              ctx.fillStyle = '#F44336';  // Red for non-compliant
+            }
+            
+            ctx.fill();
+            
+            // Add a white border
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Add a check mark or X symbol
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 12px Sans-Serif';
+            
+            if (eudrStatus) {
+              ctx.fillText('✓', badgeX, badgeY);  // Checkmark for compliant
+            } else {
+              ctx.fillText('✗', badgeX, badgeY);  // X for non-compliant
+            }
           }
         }}
       />

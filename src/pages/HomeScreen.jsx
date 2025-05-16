@@ -40,7 +40,7 @@ const HomeScreen = () => {
   }, []);
 
   const onNavItemContainerClick = useCallback(() => {
-    navigate("/01-home-screen1");
+    navigate("/reports");
   }, [navigate]);
 
   return (

@@ -45,7 +45,7 @@ const FarmMap = ({ data }) => {
                 
                 polygons.push({
                   id: farmer.v_id,
-                  name: farmer.attributes.name || farmer.v_id,
+                  name: farmer.attributes.farmer_name || farmer.v_id,
                   coordinates: coordinates
                 });
                 

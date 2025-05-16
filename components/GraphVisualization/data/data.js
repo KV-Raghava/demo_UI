@@ -189,7 +189,7 @@ const sampleData = [
                     "material": 1100011,
                     "batch_no": "BA11",
                     "posting_date": "2025-03-13 00:00:00",
-                    "is_eudr_compliant": true,
+                    "is_eudr_compliant": false,
                     "source": "SAP",
                     "quantity": 0,
                     "UOM": "KG",
