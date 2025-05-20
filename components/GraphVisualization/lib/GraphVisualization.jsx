@@ -524,20 +524,28 @@ const GraphVisualization = ({ data }) => {
         enablePanInteraction={true}
         minZoom={0.5}
         maxZoom={5}
-        linkDirectionalArrowLength={8} // Larger arrow to match node size
-        linkDirectionalArrowRelPos={1} // At the end of the link
+        
+        // Arrow settings for straight lines with middle arrows
+        linkDirectionalArrowLength={15} // Keep larger arrows for visibility
+        linkDirectionalArrowRelPos={0.5} // Position arrows in the middle of the line
         linkDirectionalArrowColor={(link) => link.color || '#555'} // Match link color
-        linkWidth={2} // Slightly thinner for cleaner look in straight layout
+        linkDirectionalArrowResolution={8} // Higher resolution for smoother arrows
+        
+        linkCurvature={0} // Keep lines straight (no curvature)
+        linkWidth={2.5} // Maintain slightly thicker lines for better visibility
         linkLineDash={[]} // No dash pattern
-        linkDirectionalParticles={0} // No particles
+        linkDirectionalParticles={0} // Remove the moving particles
+        
+        linkLabel={link => link.label || link.type || ''} // Keep showing edge type on hover
+        
         linkColor={(link) => {
-          // Use lighter link colors for better visibility against the structured layout
+          // Use slightly more opaque links for better visibility
           const baseColor = link.color || '#555';
-          // Convert hex to rgba with some transparency
           return baseColor.startsWith('#') 
-            ? `${baseColor}CC` // Add 80% opacity if it's a hex color
+            ? `${baseColor}DD` // Keep higher opacity for visibility
             : baseColor;
         }}
+        
         cooldownTicks={200}
         cooldownTime={10000}
         d3AlphaDecay={0.01} // Slower decay for more gradual settling

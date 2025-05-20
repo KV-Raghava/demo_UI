@@ -11,6 +11,8 @@ import {
   TextField,
   Icon,
   Button,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -18,6 +20,7 @@ import ProfileDropdown from "../components/ProfileDropdown";
 import PortalPopup from "../components/PortalPopup";
 import { useNavigate } from "react-router-dom";
 import GraphVisualization from "../../components/GraphVisualization/lib/GraphVisualization.jsx";
+import Map from "../../components/Map.jsx";
 import { sampleData } from "../../components/GraphVisualization/data/data";
 import styles from "./HomeScreen1.module.css";
 
@@ -26,7 +29,8 @@ const HomeScreen1 = () => {
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [textInputDateTimePickerValue, setTextInputDateTimePickerValue] =
     useState(null);
-  const [isFilterVisible, setIsFilterVisible] = useState(true);  
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [viewMode, setViewMode] = useState("graph");  
   const navigate = useNavigate();
 
   const openProfileDropdown = useCallback(() => {
@@ -39,6 +43,12 @@ const HomeScreen1 = () => {
   
   const toggleFilterVisibility = useCallback(() => {
     setIsFilterVisible((prev) => !prev);
+  }, []);
+
+  const handleViewModeChange = useCallback((event, newViewMode) => {
+    if (newViewMode !== null) {
+      setViewMode(newViewMode);
+    }
   }, []);
 
   const onNavItemContainerClick = useCallback(() => {
@@ -557,19 +567,6 @@ const HomeScreen1 = () => {
                       </Box>
                     </Box>
                   </Box>
-                  {/* <Box className={styles.image}>
-                    <img
-                      className={styles.fi2080946Icon}
-                      loading="lazy"
-                      alt=""
-                      src="/fi-2080946.svg"
-                    />
-                    <img
-                      className={styles.createProfessionalPlaceholde}
-                      alt=""
-                      src="/create-professional-placeholder-image-for-filter-panel-with-transparent-background@2x.png"
-                    />
-                  </Box> */}
                 </Box>
                 <Box className={styles.tabContainer}>
                   <Box className={styles.headerTitle1}>
@@ -583,7 +580,7 @@ const HomeScreen1 = () => {
                         Reports
                       </Typography>
                       <Box className={styles.batchDetailsIn}>
-                        Batch details in Graphical view
+                        Batch details in {viewMode === "map" ? "Map" : "Graphical"} view
                       </Box>
                     </Box>
                     <img
@@ -593,23 +590,34 @@ const HomeScreen1 = () => {
                       src="/frame-1142-1.svg"
                     />
                     <Box className={styles.toggleButton}>
-                      <Box className={styles.textInput4}>
-                        <Box className={styles.simplifiedView}>
-                          Simplified View
-                        </Box>
-                      </Box>
-                      <Box className={styles.textInput5}>
-                        <Box className={styles.simplifiedView}>
-                          Detailed View
-                        </Box>
-                      </Box>
+                      <ToggleButtonGroup
+                        value={viewMode}
+                        exclusive
+                        onChange={handleViewModeChange}
+                        aria-label="view mode"
+                      >
+                        <ToggleButton value="graph" aria-label="graph view">
+                          <Box className={styles.simplifiedView}>
+                            Graph View
+                          </Box>
+                        </ToggleButton>
+                        <ToggleButton value="map" aria-label="map view">
+                          <Box className={styles.simplifiedView}>
+                            Map View
+                          </Box>
+                        </ToggleButton>
+                      </ToggleButtonGroup>
                     </Box>
                   </Box>
                   <Box className={styles.contentContainer1}>
                     <Box className={styles.contentWrapper1}>
                       <Box className={styles.contentWrapperChild}>
                         <div style={{ width: '100%', height: '600px', position: 'relative' }}>
-                          <GraphVisualization data={sampleData} />
+                          {viewMode === "graph" ? (
+                            <GraphVisualization data={sampleData} />
+                          ) : (
+                            <Map />
+                          )}
                         </div>
                       </Box>
                     </Box>

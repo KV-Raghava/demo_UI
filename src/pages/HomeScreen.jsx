@@ -24,7 +24,7 @@ const HomeScreen = () => {
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [textInputDateTimePickerValue, setTextInputDateTimePickerValue] =
     useState(null);
-  const [isFilterVisible, setIsFilterVisible] = useState(true);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
   const navigate = useNavigate();
 
   const openProfileDropdown = useCallback(() => {
