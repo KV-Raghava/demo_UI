@@ -65,6 +65,10 @@ const GraphVisualization = ({ data }) => {
       case 'Transfer_Order':
         // Format: "Transfer: [from_plant] → [to_plant]"
         return `Transfer: ${attributes.from_plant || 'N/A'} → ${attributes.to_plant || 'N/A'}`;
+
+      case 'Destination':
+        // Format: "[name] - [country]"
+        return attributes.name ? `${attributes.name} - ${attributes.country || ''}` : `Destination ${v_id.split('-').pop()}`;
       
       default:
         return attributes.name || v_id;
@@ -101,6 +105,8 @@ const GraphVisualization = ({ data }) => {
         return 'Process Order';
       case 'Transfer_Order':
         return 'Transfer Order';
+      case 'Destination':
+        return 'Destination';
       default:
         return 'Unknown';
     }
@@ -230,7 +236,8 @@ const GraphVisualization = ({ data }) => {
         'Purchase_Order',
         'PMB',
         'Process_Order',
-        'Transfer_Order'
+        'Transfer_Order',
+        'Destination'
       ];
       
       // Calculate X positions based on node type order (strict columns)
