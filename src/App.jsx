@@ -29,7 +29,7 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/reports":
+      case "/trace-graph":
         title = "";
         metaDescription = "";
         break;
@@ -56,7 +56,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<CredentialLogin />} />
-      <Route path="/reports" element={<HomeScreen1 />} />
+      <Route path="/trace-graph" element={<HomeScreen1 />} />
       <Route path="/01-home-screen" element={<HomeScreen />} />
     </Routes>
   );

@@ -532,9 +532,25 @@ const GraphVisualization = ({ data }) => {
         minZoom={0.5}
         maxZoom={5}
         
-        // Arrow settings for straight lines with middle arrows
+        // Arrow settings
         linkDirectionalArrowLength={15} // Keep larger arrows for visibility
-        linkDirectionalArrowRelPos={0.5} // Position arrows in the middle of the line
+        linkDirectionalArrowRelPos={(link) => {
+          // Position arrows at different points along the edge based on connection type
+          if ((link.source.type === 'PMB' && link.target.type === 'Purchase_Order') ||
+              (link.source.type === 'Purchase_Order' && link.target.type === 'PMB')) {
+            return 0.3; // Position at 30% of the way from source to target
+          } else if ((link.source.type === 'PMB' && link.target.type === 'Process_Order') ||
+                     (link.source.type === 'Process_Order' && link.target.type === 'PMB')) {
+            return 0.7; // Position at 70% of the way from source to target
+          } else if (link.source.type === 'Process_Order' || link.target.type === 'Process_Order') {
+            return 0.4; // Position Process Order arrows slightly off-center
+          } else if (link.source.type === 'Purchase_Order' || link.target.type === 'Purchase_Order') {
+            return 0.6; // Position Purchase Order arrows slightly off-center
+          }
+          
+          // Default position in the middle for all other connections
+          return 0.5;
+        }}
         linkDirectionalArrowColor={(link) => link.color || '#555'} // Match link color
         linkDirectionalArrowResolution={8} // Higher resolution for smoother arrows
         
@@ -586,23 +602,77 @@ const GraphVisualization = ({ data }) => {
           node.fy = node.y;
         }}
         nodeCanvasObject={(node, ctx, globalScale) => {
-          // Bigger nodes for better visibility and to fit full names
-          const nodeRadius = 40; // Increased from 30 to make nodes bigger
-          const fontSize = 12;   // Increased font size for better readability
+          // Bigger nodes for better visibility and to fit icons
+          const nodeRadius = 40; // Keeping same size for consistency
           
-          // Node circle
+          // Node circle with white background
           ctx.beginPath();
           ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
-          ctx.fillStyle = node.color;
+          ctx.fillStyle = 'white';
           ctx.fill();
           
-          // Add subtle border to manually positioned nodes
-          if (node.fx !== undefined && node.fy !== undefined) {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-          }
+          // Add a subtle border with the node's type color
+          ctx.strokeStyle = node.color;
+          ctx.lineWidth = 3;
+          ctx.stroke();
           
+          // Draw an icon based on node type
+          const drawNodeIcon = (type) => {
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Use a larger font size for icons
+            ctx.font = 'bold 24px Sans-Serif';
+            
+            // Use unicode icons based on node type with appropriate colors
+            switch (type) {
+              case 'Farmer':
+                ctx.fillStyle = '#4CAF50'; // Green
+                ctx.fillText('🧑‍🌾', node.x, node.y); // Farmer icon
+                break;
+              case 'Farmer_Group':
+                ctx.fillStyle = '#2196F3'; // Blue
+                ctx.fillText('👥', node.x, node.y); // Group of people icon
+                break;
+              case 'Local_Buying_Agent':
+                ctx.fillStyle = '#FFA500'; // Orange
+                ctx.fillText('🤝', node.x, node.y); // Handshake icon
+                break;
+              case 'Lot':
+                ctx.fillStyle = '#9C27B0'; // Purple
+                ctx.fillText('📦', node.x, node.y); // Package icon
+                break;
+              case 'Purchase_Order':
+                ctx.fillStyle = '#F44336'; // Red
+                ctx.fillText('🧾', node.x, node.y); // Receipt icon
+                break;
+              case 'Process_Order':
+                ctx.fillStyle = '#FF5722'; // Deep Orange
+                ctx.fillText('⚙️', node.x, node.y); // Gear icon
+                break;
+              case 'PMB':
+                ctx.fillStyle = '#795548'; // Brown
+                ctx.fillText('🏭', node.x, node.y); // Factory icon
+                break;
+              case 'Transfer_Order':
+                ctx.fillStyle = '#009688'; // Teal
+                ctx.fillText('🔄', node.x, node.y); // Transfer icon
+                break;
+              case 'Destination':
+                ctx.fillStyle = '#607D8B'; // Blue Grey
+                ctx.fillText('🏢', node.x, node.y); // Building icon
+                break;
+              default:
+                ctx.fillStyle = '#607D8B'; // Blue Grey
+                ctx.fillText('❓', node.x, node.y); // Question mark for unknown types
+            }
+          };
+          
+          // Draw the icon for this node
+          drawNodeIcon(node.type);
+          
+          /* 
+          // Original text label rendering code (commented out)
           // Draw the short label inside
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -643,18 +713,19 @@ const GraphVisualization = ({ data }) => {
               startY + (i * lineHeight)
             );
           });
+          */
           
           // Add highlight when hovering
           if (node === selectedNode) {
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 3; // Thicker highlight border
+            ctx.strokeStyle = node.color;
+            ctx.lineWidth = 5; // Thicker highlight border
             ctx.stroke();
             
             // Add outer glow for selected node
             ctx.beginPath();
             ctx.arc(node.x, node.y, nodeRadius + 5, 0, 2 * Math.PI);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 6;
             ctx.stroke();
           }
 

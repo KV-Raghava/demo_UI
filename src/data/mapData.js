@@ -210,15 +210,19 @@ export const mapData = [
         }
       },
       {
-        "v_id": "PROCESS-1011",
-        "v_type": "Process_Order",
+        "v_id": "DESTINATION-SG-001",
+        "v_type": "Destination",
         "attributes": {
-          "process_date": "2025-03-14 00:00:00",
-          "process_name": "PRIMARY PROCESSING / CLEANING",
-          "latitude": -5.980,
-          "longitude": -75.950,
-          "source": "SAP",
-          "@source_country": [],
+          "id": "DESTINATION-SG-001",
+          "name": "Destination",
+          "country": "SINGAPORE",
+          "latitude": 1.3521,
+          "longitude": 103.8198,
+          "arrival_date": "2025-04-02 00:00:00",
+          "quantity_received": 2037,
+          "UOM": "KG",
+          "status": "Received",
+          "@source_country": ["PERU"],
           "@visited": false,
           "@destination_country": []
         }
@@ -307,11 +311,11 @@ export const mapData = [
         "attributes": {}
       },
       {
-        "e_type": "Has_Process_Order",
+        "e_type": "Transfer",
         "from_id": "1001-1100011-BA11",
         "from_type": "PMB",
-        "to_id": "PROCESS-1011",
-        "to_type": "Process_Order",
+        "to_id": "DESTINATION-SG-001",
+        "to_type": "Destination",
         "directed": false,
         "attributes": {}
       }

@@ -111,7 +111,7 @@ const HomeScreen = () => {
                       component="h3"
                       sx={{ fontWeight: "400", lineHeight: "100%" }}
                     >
-                      Reports
+                      Trace Graph
                     </Typography>
                     <img
                       className={styles.chevronDownIcon}

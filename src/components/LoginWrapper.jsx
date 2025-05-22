@@ -16,7 +16,7 @@ const LoginWrapper = ({ className = "" }) => {
   const navigate = useNavigate();
 
   const onMatBtnClick = useCallback(() => {
-    navigate("/01-home-screen");
+    navigate("/trace-graph");
   }, [navigate]);
 
   return (

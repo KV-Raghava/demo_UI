@@ -54,6 +54,10 @@ const HomeScreen1 = () => {
   const onNavItemContainerClick = useCallback(() => {
     navigate("/01-home-screen");
   }, [navigate]);
+  
+  const onContactUsClick = useCallback(() => {
+    window.open("https://www.mindsprint.com/contact.html", "_blank");
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -85,7 +89,7 @@ const HomeScreen1 = () => {
                   </Box>
                 </Box>
                 <Box className={styles.navBar}>
-                  <Box
+                  {/* <Box
                     className={styles.navItem}
                     onClick={onNavItemContainerClick}
                   >
@@ -102,7 +106,7 @@ const HomeScreen1 = () => {
                       alt=""
                       src="/chevrondown.svg"
                     />
-                  </Box>
+                  </Box> */}
                   <Box className={styles.navItem1}>
                     <Box className={styles.component1}>
                       <img
@@ -111,14 +115,14 @@ const HomeScreen1 = () => {
                         src="/homeoutline-1.svg"
                       />
                     </Box>
-                    <Box className={styles.dashboard}>Reports</Box>
+                    <Box className={styles.dashboard}>Trace Graph</Box>
                     <img
                       className={styles.chevronDownIcon}
                       alt=""
                       src="/chevrondown1.svg"
                     />
                   </Box>
-                  <Box className={styles.navItem2}>
+                  {/* <Box className={styles.navItem2}>
                     <Box className={styles.component1}>
                       <img
                         className={styles.homeOutlineIcon}
@@ -132,8 +136,8 @@ const HomeScreen1 = () => {
                       alt=""
                       src="/chevrondown1.svg"
                     />
-                  </Box>
-                  <Box className={styles.navItem2}>
+                  </Box> */}
+                  {/* <Box className={styles.navItem2}>
                     <Box className={styles.component1}>
                       <img
                         className={styles.homeOutlineIcon}
@@ -147,8 +151,8 @@ const HomeScreen1 = () => {
                       alt=""
                       src="/chevrondown1.svg"
                     />
-                  </Box>
-                  <Box className={styles.navItem4}>
+                  </Box> */}
+                  {/* <Box className={styles.navItem4}>
                     <Box className={styles.component1}>
                       <img
                         className={styles.homeOutlineIcon}
@@ -162,8 +166,12 @@ const HomeScreen1 = () => {
                       alt=""
                       src="/chevrondown1.svg"
                     />
-                  </Box>
-                  <Box className={styles.navItem2}>
+                  </Box> */}
+                  <Box 
+                    className={styles.navItem2} 
+                    onClick={onContactUsClick}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <Box className={styles.component1}>
                       <img
                         className={styles.homeOutlineIcon}
@@ -171,7 +179,7 @@ const HomeScreen1 = () => {
                         src="/homeoutline-1.svg"
                       />
                     </Box>
-                    <Box className={styles.dashboard}>Help</Box>
+                    <Box className={styles.dashboard}>Contact Us</Box>
                     <img
                       className={styles.chevronDownIcon}
                       alt=""
@@ -180,7 +188,7 @@ const HomeScreen1 = () => {
                   </Box>
                 </Box>
               </Box>
-              <Box className={styles.headerRight}>
+              {/* <Box className={styles.headerRight}>
                 <Box className={styles.buSelection}>
                   <img
                     className={styles.profileIcon}
@@ -234,11 +242,11 @@ const HomeScreen1 = () => {
                   ref={profileIcon1Ref}
                   onClick={openProfileDropdown}
                 />
-              </Box>
+              </Box> */}
             </header>
             <section className={styles.contentContainer}>
               <Box className={styles.contentWrapper}>
-                <Box className={styles.filter2} style={{ width: isFilterVisible ? 'auto' : '60px', transition: 'width 0.3s ease-in-out', overflow: 'hidden' }}>
+                {/* <Box className={styles.filter2} style={{ width: isFilterVisible ? 'auto' : '60px', transition: 'width 0.3s ease-in-out', overflow: 'hidden' }}>
                   <Box className={styles.headerContent}>
                     <Box className={styles.headerTitle}>
                       <Box className={styles.title} style={{ display: isFilterVisible ? 'block' : 'none' }}>
@@ -567,7 +575,7 @@ const HomeScreen1 = () => {
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                </Box> */}
                 <Box className={styles.tabContainer}>
                   <Box className={styles.headerTitle1}>
                     <Box className={styles.title1}>
@@ -577,18 +585,18 @@ const HomeScreen1 = () => {
                         component="h1"
                         sx={{ fontWeight: "400", lineHeight: "100%" }}
                       >
-                        Reports
+                        Trace Graph
                       </Typography>
                       <Box className={styles.batchDetailsIn}>
                         Batch details in {viewMode === "map" ? "Map" : "Graphical"} view
                       </Box>
                     </Box>
-                    <img
+                    {/* <img
                       className={styles.headerTitleItem}
                       loading="lazy"
                       alt=""
                       src="/frame-1142-1.svg"
-                    />
+                    /> */}
                     <Box className={styles.toggleButton}>
                       <ToggleButtonGroup
                         value={viewMode}
