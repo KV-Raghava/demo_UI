@@ -202,6 +202,30 @@ const HomeScreen = () => {
                   </Box>
                 </Box>
               </Box>
+              {/* Adding Demo version marquee */}
+              <Box 
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  right: '20px',
+                  backgroundColor: 'rgba(237, 21, 21, 0.8)',
+                  color: 'white',
+                  padding: '4px 12px',
+                  borderRadius: '4px',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                  animation: 'pulse 2s infinite',
+                  '@keyframes pulse': {
+                    '0%': { opacity: 1 },
+                    '50%': { opacity: 0.7 },
+                    '100%': { opacity: 1 },
+                  }
+                }}
+              >
+                This is a demo version as on May 21st
+              </Box>
               <Box className={styles.headerRight}>
                 <Box className={styles.buSelection}>
                   <img

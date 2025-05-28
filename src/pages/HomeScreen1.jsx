@@ -188,61 +188,35 @@ const HomeScreen1 = () => {
                   </Box>
                 </Box>
               </Box>
-              {/* <Box className={styles.headerRight}>
-                <Box className={styles.buSelection}>
-                  <img
-                    className={styles.profileIcon}
-                    loading="lazy"
-                    alt=""
-                    src="/profileicon@2x.png"
-                  />
-                  <Box className={styles.navItem6}>
-                    <Box className={styles.dashboard}>Coffee</Box>
-                    <img
-                      className={styles.iconchevronDown}
-                      loading="lazy"
-                      alt=""
-                      src="/iconchevrondown.svg"
-                    />
-                  </Box>
+              <Box className={styles.headerRight}>
+                {/* Scrolling marquee positioned on the right side of header */}
+                <Box 
+                  sx={{
+                    backgroundColor: 'rgba(237, 21, 21, 0.8)',
+                    color: 'white',
+                    padding: '4px 12px',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    fontSize: '14px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    width: '300px',
+                    '& div': {
+                      display: 'inline-block',
+                      animation: 'marquee 10s linear infinite',
+                      paddingRight: '50px'
+                    },
+                    '@keyframes marquee': {
+                      '0%': { transform: 'translateX(100%)' },
+                      '100%': { transform: 'translateX(-100%)' }
+                    }
+                  }}
+                >
+                  <div>This is a demo version as on 22nd May 2025</div>
                 </Box>
-                <img
-                  className={styles.headerRightChild}
-                  alt=""
-                  src="/frame-12732.svg"
-                />
-                <img
-                  className={styles.notificationIcon}
-                  loading="lazy"
-                  alt=""
-                  src="/notification@2x.png"
-                />
-                <Box className={styles.notification}>
-                  <img
-                    className={styles.iconchatAlt}
-                    alt=""
-                    src="/iconchatalt@2x.png"
-                  />
-                  <Box className={styles.chat}>Chat</Box>
-                </Box>
-                <Box className={styles.notification1}>
-                  <img
-                    className={styles.iconbell}
-                    loading="lazy"
-                    alt=""
-                    src="/iconbell.svg"
-                  />
-                  <Box className={styles.notificationChild} />
-                </Box>
-                <img
-                  className={styles.profileIcon1}
-                  loading="lazy"
-                  alt=""
-                  src="/profileicon-1@2x.png"
-                  ref={profileIcon1Ref}
-                  onClick={openProfileDropdown}
-                />
-              </Box> */}
+                {/* ...existing code... */}
+              </Box>
             </header>
             <section className={styles.contentContainer}>
               <Box className={styles.contentWrapper}>
