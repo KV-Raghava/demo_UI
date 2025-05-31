@@ -21,6 +21,7 @@ import PortalPopup from "../components/PortalPopup";
 import { useNavigate } from "react-router-dom";
 import GraphVisualization from "../../components/GraphVisualization/lib/GraphVisualization.jsx";
 import Map from "../../components/Map.jsx";
+import TableView from "../../components/TableView/TableView.jsx";
 import { sampleData } from "../../components/GraphVisualization/data/data";
 import styles from "./HomeScreen1.module.css";
 
@@ -562,7 +563,7 @@ const HomeScreen1 = () => {
                         Trace Graph
                       </Typography>
                       <Box className={styles.batchDetailsIn}>
-                        Batch details in {viewMode === "map" ? "Map" : "Graphical"} view
+                        Batch details in {viewMode === "map" ? "Map" : viewMode === "table" ? "Table" : "Graphical"} view
                       </Box>
                     </Box>
                     {/* <img
@@ -588,6 +589,11 @@ const HomeScreen1 = () => {
                             Map View
                           </Box>
                         </ToggleButton>
+                        <ToggleButton value="table" aria-label="table view">
+                          <Box className={styles.simplifiedView}>
+                            Table View
+                          </Box>
+                        </ToggleButton>
                       </ToggleButtonGroup>
                     </Box>
                   </Box>
@@ -597,8 +603,10 @@ const HomeScreen1 = () => {
                         <div style={{ width: '100%', height: '600px', position: 'relative' }}>
                           {viewMode === "graph" ? (
                             <GraphVisualization data={sampleData} />
-                          ) : (
+                          ) : viewMode === "map" ? (
                             <Map />
+                          ) : (
+                            <TableView data={sampleData} />
                           )}
                         </div>
                       </Box>
