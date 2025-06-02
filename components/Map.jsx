@@ -163,7 +163,7 @@ const Map = () => {
       <div style={mapContainerStyle}>
         <MapContainer 
           center={center} 
-          zoom={11} 
+          zoom={3} 
           style={{ height: '600px', width: '100%' }}
         >
           <TileLayer
