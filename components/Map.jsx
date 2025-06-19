@@ -166,10 +166,30 @@ const Map = () => {
           zoom={3} 
           style={{ height: '600px', width: '100%' }}
         >
+          {/* Using Google Maps tiles for accurate India borders */}
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
+            url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&gl=IN&hl=en"
+            maxZoom={20}
           />
+          
+          {/* Alternative: Mapbox tiles - requires API key but shows accurate borders */}
+          {/* 
+          <TileLayer
+            attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+            url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_TOKEN"
+            maxZoom={18}
+          />
+          */}
+          
+          {/* Alternative: Esri World Street Map */}
+          {/* 
+          <TileLayer
+            attribution='Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={19}
+          />
+          */}
           
           {/* Draw connections between nodes */}
           {connections.map((connection, index) => (
