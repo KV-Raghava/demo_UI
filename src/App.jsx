@@ -5,8 +5,8 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import CredentialLogin from "./pages/CredentialLogin";
+// import { AuthProvider } from "./context/AuthContext"; // Commented out login functionality
+// import CredentialLogin from "./pages/CredentialLogin"; // Commented out login functionality
 import HomeScreen1 from "./pages/HomeScreen1";
 import HomeScreen from "./pages/HomeScreen";
 
@@ -55,13 +55,14 @@ function App() {
   }, [pathname]);
 
   return (
-    <AuthProvider>
+    // <AuthProvider> {/* Commented out login functionality */}
       <Routes>
-        <Route path="/" element={<CredentialLogin />} />
+        <Route path="/" element={<HomeScreen1 />} /> {/* Changed to make trace-graph the landing page */}
         <Route path="/trace-graph" element={<HomeScreen1 />} />
         <Route path="/01-home-screen" element={<HomeScreen />} />
+        {/* <Route path="/" element={<CredentialLogin />} /> */} {/* Commented out login functionality */}
       </Routes>
-    </AuthProvider>
+    // </AuthProvider> {/* Commented out login functionality */}
   );
 }
 export default App;
