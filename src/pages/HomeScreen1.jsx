@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import {
   Typography,
   Box,
@@ -18,13 +18,16 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import ProfileDropdown from "../components/ProfileDropdown";
 import PortalPopup from "../components/PortalPopup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import GraphVisualization from "../../components/GraphVisualization/lib/GraphVisualization.jsx";
 import Map from "../../components/Map.jsx";
 import { sampleData } from "../../components/GraphVisualization/data/data";
+import { sampleData as mediumData } from "../../components/GraphVisualization/data/medium";
+import { sampleData as complexData } from "../../components/GraphVisualization/data/complex";
 import styles from "./HomeScreen1.module.css";
 
 const HomeScreen1 = () => {
+  const { collection_id } = useParams();
   const profileIcon1Ref = useRef(null);
   const [isProfileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [textInputDateTimePickerValue, setTextInputDateTimePickerValue] =
@@ -32,6 +35,20 @@ const HomeScreen1 = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [viewMode, setViewMode] = useState("graph");  
   const navigate = useNavigate();
+
+  // Select data based on collection_id parameter
+  const currentData = useMemo(() => {
+    switch (collection_id) {
+      case "simple":
+        return sampleData;
+      case "medium":
+        return mediumData;
+      case "complex":
+        return complexData;
+      default:
+        return sampleData; // fallback to simple data
+    }
+  }, [collection_id]);
 
   const openProfileDropdown = useCallback(() => {
     setProfileDropdownOpen(true);
@@ -559,7 +576,7 @@ const HomeScreen1 = () => {
                         component="h1"
                         sx={{ fontWeight: "400", lineHeight: "100%" }}
                       >
-                        Trace Graph
+                        Trace Graph - {collection_id ? collection_id.charAt(0).toUpperCase() + collection_id.slice(1) : "Simple"} Collection
                       </Typography>
                       <Box className={styles.batchDetailsIn}>
                         Batch details in {viewMode === "map" ? "Map" : "Graphical"} view
@@ -596,7 +613,7 @@ const HomeScreen1 = () => {
                       <Box className={styles.contentWrapperChild}>
                         <div style={{ width: '100%', height: '600px', position: 'relative' }}>
                           {viewMode === "graph" ? (
-                            <GraphVisualization data={sampleData} />
+                            <GraphVisualization data={currentData} />
                           ) : (
                             <Map />
                           )}

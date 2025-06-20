@@ -45,7 +45,7 @@ const LoginWrapper = ({ className = "" }) => {
 
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        navigate("/trace-graph");
+        navigate("/trace-graph/simple");
       }
     },
     [navigate, login, formData, setError]

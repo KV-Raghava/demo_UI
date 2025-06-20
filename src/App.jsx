@@ -31,6 +31,7 @@ function App() {
         metaDescription = "";
         break;
       case "/trace-graph":
+      case pathname.startsWith("/trace-graph/"):
         title = "";
         metaDescription = "";
         break;
@@ -58,7 +59,7 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<CredentialLogin />} />
-        <Route path="/trace-graph" element={<HomeScreen1 />} />
+        <Route path="/trace-graph/:collection_id" element={<HomeScreen1 />} />
         <Route path="/01-home-screen" element={<HomeScreen />} />
       </Routes>
     </AuthProvider>
