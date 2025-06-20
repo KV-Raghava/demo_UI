@@ -4,9 +4,8 @@ import {
   Route,
   useNavigationType,
   useLocation,
+  Navigate,
 } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import CredentialLogin from "./pages/CredentialLogin";
 import HomeScreen1 from "./pages/HomeScreen1";
 import HomeScreen from "./pages/HomeScreen";
 
@@ -56,13 +55,11 @@ function App() {
   }, [pathname]);
 
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/" element={<CredentialLogin />} />
-        <Route path="/trace-graph/:collection_id" element={<HomeScreen1 />} />
-        <Route path="/01-home-screen" element={<HomeScreen />} />
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Navigate to="/trace-graph/simple" replace />} />
+      <Route path="/trace-graph/:collection_id" element={<HomeScreen1 />} />
+      <Route path="/01-home-screen" element={<HomeScreen />} />
+    </Routes>
   );
 }
 export default App;

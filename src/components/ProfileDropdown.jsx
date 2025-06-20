@@ -32,18 +32,6 @@ const ProfileDropdown = ({ className = "", onClose }) => {
             <Box className={styles.secondaryText}>Secondary text</Box>
           </Box>
         </Box>
-        <Box className={styles.matListItem}>
-          <img
-            className={styles.iconuser}
-            loading="lazy"
-            alt=""
-            src="/iconuser-2.svg"
-          />
-          <Box className={styles.vListItemContent}>
-            <Box className={styles.myProfile}>Logout</Box>
-            <Box className={styles.secondaryText}>Secondary text</Box>
-          </Box>
-        </Box>
       </section>
     </Box>
   );
