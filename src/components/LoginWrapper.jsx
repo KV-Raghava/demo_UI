@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   Typography,
   Box,
@@ -7,17 +7,49 @@ import {
   Icon,
   IconButton,
   Button,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useAuth } from "../context/AuthContext";
 import styles from "./LoginWrapper.module.css";
 
 const LoginWrapper = ({ className = "" }) => {
   const navigate = useNavigate();
+  const { login, loading, error, setError } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const onMatBtnClick = useCallback(() => {
-    navigate("/trace-graph");
-  }, [navigate]);
+  const handleInputChange = (field) => (event) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: event.target.value,
+    }));
+    // Clear error when user starts typing
+    if (error) {
+      setError("");
+    }
+  };
+
+  const onMatBtnClick = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      if (!formData.email || !formData.password) {
+        setError("Please fill in all fields");
+        return;
+      }
+
+      const result = await login(formData.email, formData.password);
+      if (result.success) {
+        navigate("/trace-graph");
+      }
+    },
+    [navigate, login, formData, setError]
+  );
 
   return (
     <Box className={[styles.loginWrapper, className].join(" ")}>
@@ -64,14 +96,22 @@ const LoginWrapper = ({ className = "" }) => {
           </Box>
         </Box>
         <Box className={styles.inputFormContainer}>
-          <form className={styles.inputForm}>
+          <form className={styles.inputForm} onSubmit={onMatBtnClick}>
+            {error && (
+              <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+                {error}
+              </Alert>
+            )}
             <Box className={styles.credentialLogin}>
               <Box className={styles.textInputContainer}>
                 <Box className={styles.username}>Username</Box>
                 <TextField
                   className={styles.textInput}
-                  placeholder="username@domain.com"
+                  placeholder="john.k@mindsprint.com"
                   variant="outlined"
+                  value={formData.email}
+                  onChange={handleInputChange("email")}
+                  disabled={loading}
                   InputProps={{
                     endAdornment: (
                       <img width="20px" height="20px" src="/container.svg" />
@@ -92,7 +132,11 @@ const LoginWrapper = ({ className = "" }) => {
                 <TextField
                   className={styles.textInput}
                   placeholder="***********"
+                  type="password"
                   variant="outlined"
+                  value={formData.password}
+                  onChange={handleInputChange("password")}
+                  disabled={loading}
                   InputProps={{
                     endAdornment: (
                       <img
@@ -111,26 +155,35 @@ const LoginWrapper = ({ className = "" }) => {
                     "& .MuiInputBase-input": { color: "#555" },
                   }}
                 />
-                <Box className={styles.horizontalContainer}>
-                  <Box className={styles.forgotPassword}>Forgot Password?</Box>
-                </Box>
+              </Box>
+              <Box className={styles.horizontalContainer}>
+                <Box className={styles.forgotPassword}>Forgot Password?</Box>
               </Box>
             </Box>
             <Button
               className={styles.matBtn}
               disableElevation
               variant="contained"
+              type="submit"
+              disabled={loading}
               sx={{
                 color: "#fff",
                 fontSize: "14",
                 background: "#ed1515",
                 borderRadius: "4px",
                 "&:hover": { background: "#ed1515" },
+                "&:disabled": { background: "#ccc" },
                 height: 52,
               }}
-              onClick={onMatBtnClick}
             >
-              Login
+              {loading ? (
+                <>
+                  <CircularProgress size={20} color="inherit" sx={{ mr: 1 }} />
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
             <Box className={styles.textInput2}>
               <Box className={styles.matDivider} />
@@ -145,7 +198,7 @@ const LoginWrapper = ({ className = "" }) => {
                   variant="inherit"
                   component="span"
                   sx={{ fontFamily: "var(--font-gilroy-regular)" }}
-                >{`Don’t have a credentials? Try `}</Typography>
+                >{`Don't have a credentials? Try `}</Typography>
                 <Typography
                   className={styles.loginWithSso}
                   variant="inherit"
